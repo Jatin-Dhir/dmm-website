@@ -741,3 +741,11 @@ html { scrollbar-width: thin; scrollbar-color: rgba(137, 45, 235, 0.7) transpare
 .faq summary, .stat-t, .value p, .row-body > p, .case-quote p, .who .role, .stat-d { text-wrap: pretty; }
 .results:last-child { padding-bottom: clamp(160px, 24vh, 300px); }
 .case-quote { padding-bottom: clamp(200px, 26vh, 320px); }
+/* phones and tablets: no card stacking, a plain column with room between cards */
+@media (max-width: 899px) {
+  .stack-card { position: static; top: auto; }
+  .stack-cards { row-gap: 56px; padding-bottom: 72px; }
+}
+/* loader v3: the wordmark's letters rise; the count sits top-right */
+.loader-ui { grid-template-rows: auto; }
+.loader-mark .ch { display: inline-block; }

@@ -28,7 +28,7 @@ const year = String(new Date().getFullYear()).slice(2);
       <div class="stack-cards">
         {
           featuredWork.map((c, i) => (
-            <article class="stack-card" style={`--i: ${i}`} data-stack-card>
+            <article class="stack-card" style={`--i: ${i}`} data-stack-card data-fade>
               <CaseCard study={c} index={i + 1} />
             </article>
           ))

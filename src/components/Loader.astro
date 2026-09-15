@@ -1,12 +1,11 @@
 ---
 // Loading screen and page wipe. Shown only while JavaScript runs (html.js) and never under
-// prefers-reduced-motion. motion.ts counts the real asset load and pours the hero photo into
-// the wordmark from left to right while the disciplines flip through; at 100 the cover wipes
-// away along the site's diagonal with a violet edge and the wordmark glides into its place in
-// the hero. On link clicks the same cover closes over the page before the next one loads.
+// prefers-reduced-motion. motion.ts counts the real asset load top-right while the wordmark
+// rises letter by letter; at 100 the cover wipes away along the site's diagonal with a violet
+// edge and the wordmark glides into its place in the hero. On link clicks the same cover closes
+// over the page before the next one loads.
 import Wordmark from './Wordmark.astro';
-import { heroDisciplines, site } from '../data/site';
-const words = heroDisciplines.map((d) => d.label);
+import { site } from '../data/site';
 ---
 
 <div class="loader" data-loader aria-hidden="true">
@@ -17,15 +16,7 @@ const words = heroDisciplines.map((d) => d.label);
         <span>{site.name}<span class="loader-place"> — {site.address.city}, {site.address.region}</span></span>
         <span class="loader-count"><span data-loader-count>0</span>%</span>
       </div>
-      <div class="loader-mid">
-        <span class="idx" data-loader-idx>01/</span>
-        <span class="loader-word" data-loader-word data-words={JSON.stringify(words)}><span>{words[0]}</span></span>
-      </div>
     </div>
   </div>
-  <div class="loader-mark" data-loader-mark>
-    <div class="loader-mark-base"><Wordmark /></div>
-    <div class="loader-mark-fill" data-loader-fill><Wordmark /></div>
-    <div class="loader-mark-white" data-loader-white><Wordmark /></div>
-  </div>
+  <div class="loader-mark" data-loader-mark><Wordmark /></div>
 </div>

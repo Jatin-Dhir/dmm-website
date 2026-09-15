@@ -181,48 +181,23 @@ function loader(intro: gsap.core.Timeline | null, flipTo: HTMLElement | null) {
   }
 
   const count = $('[data-loader-count]', el)!;
-  const wordWrap = $('[data-loader-word]', el)!;
-  const word = wordWrap.firstElementChild as HTMLElement;
-  const idx = $('[data-loader-idx]', el)!;
   const mark = $('[data-loader-mark]', el)!;
-  const fill = $('[data-loader-fill]', el)!;
-  const white = $('[data-loader-white]', el)!;
-  const words: string[] = JSON.parse(wordWrap.dataset.words ?? '[]');
-  // on the home page the hero photo pours into the letters
-  const photo = $('[data-hero]')?.dataset.fluidSrc;
-  if (photo) { fill.style.setProperty('--loader-photo', `url("${photo}")`); fill.classList.add('has-photo'); }
   const state = { v: 0 };
-  let shown = 0, pending = 0, flipping = false;
-  const flip = () => {
-    if (flipping || pending === shown) return;
-    flipping = true;
-    const next = pending;
-    gsap.timeline({ onComplete: () => { flipping = false; flip(); } })
-      .to(word, { yPercent: -110, duration: 0.22, ease: 'power3.in' })
-      .add(() => { shown = next; word.textContent = words[next]; idx.textContent = `${String(next + 1).padStart(2, '0')}/`; })
-      .fromTo(word, { yPercent: 110 }, { yPercent: 0, duration: 0.4, ease: 'power3.out' });
-  };
-  const render = () => {
-    const n = Math.round(state.v);
-    count.textContent = String(n);
-    fill.style.clipPath = `inset(0 ${(100 - state.v).toFixed(2)}% 0 0)`;
-    pending = Math.min(words.length - 1, Math.floor(n / (100 / words.length)));
-    flip();
-  };
+  const render = () => { count.textContent = String(Math.round(state.v)); };
+  // the wordmark rises letter by letter while the count runs
+  gsap.fromTo($$('.ch', mark), { yPercent: 45, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 1, ease: SPRING, stagger: 0.035, delay: 0.15 });
   const finish = () => {
     const tl = gsap.timeline();
     tl.to($$('.loader-ui > *', el), { opacity: 0, duration: 0.3, ease: 'power2.out' }, 0);
     if (flipTo) {
       // FLIP: carry the loader's wordmark to exactly where the hero's sits, then swap them
-      const from = $('.wm-inner', fill)!.getBoundingClientRect();
+      const from = $('.wm-inner', mark)!.getBoundingClientRect();
       const to = $('.wm-inner', flipTo)!.getBoundingClientRect();
       const m = mark.getBoundingClientRect();
       const s = to.width / from.width;
       const tx = to.left - m.left - (from.left - m.left) * s;
       const ty = to.top - m.top - (from.top - m.top) * s;
       tl.to(mark, { x: tx, y: ty, scale: s, transformOrigin: '0 0', duration: 1.05, ease: 'power3.inOut' }, 0.15)
-        .to(fill, { opacity: 0, duration: 0.5, ease: 'power2.inOut' }, 0.5)
-        .to(white, { opacity: 1, duration: 0.5, ease: 'power2.inOut' }, 0.5)
         .add(() => { gsap.set(flipTo, { opacity: 1 }); mark.style.display = 'none'; }, 1.2);
     } else {
       tl.to(mark, { opacity: 0, duration: 0.4, ease: 'power2.out' }, 0);
@@ -230,14 +205,14 @@ function loader(intro: gsap.core.Timeline | null, flipTo: HTMLElement | null) {
     tl.add(reveal, 0.15);
   };
   // one continuous motion: 0 → 90 over the minimum time, then straight on to 100 once the
-  // assets are in; if they are slow, the fill keeps creeping instead of freezing
+  // assets are in; if they are slow, the count keeps creeping instead of freezing
   let ready = false, rampDone = false, creep: gsap.core.Tween | null = null;
   const complete = () => {
     creep?.kill();
-    gsap.to(state, { v: 100, duration: 0.5, ease: 'power2.inOut', onUpdate: render, onComplete: finish });
+    gsap.to(state, { v: 100, duration: 0.4, ease: 'power2.inOut', onUpdate: render, onComplete: finish });
   };
   gsap.to(state, {
-    v: 90, duration: 1.9, ease: 'power1.inOut', onUpdate: render,
+    v: 90, duration: 1.3, ease: 'power1.inOut', onUpdate: render,
     onComplete: () => {
       rampDone = true;
       if (ready) complete();
@@ -355,7 +330,8 @@ function wedges() {
 
 /* ---------- stacked cards shrink as later cards cover them ---------- */
 function stack() {
-  if (reduce) return;
+  // phones and tablets: cards simply flow, the stacking only reads well with room to breathe
+  if (reduce || matchMedia('(max-width: 899px)').matches) return;
   const cards = $$('[data-stack-card]');
   cards.forEach((card, i) => {
     const later = cards.slice(i + 1);
@@ -449,13 +425,14 @@ function counters() {
   });
 }
 
-// the footer wordmark rises letter by letter
+// wordmarks that animate letter by letter (the loader's and the footer's) get their letters wrapped
+const splitChars = (wm: HTMLElement) =>
+  $$('.wm-line', wm).forEach((l) => { l.innerHTML = (l.textContent ?? '').split('').map((c) => `<span class="ch">${c}</span>`).join(''); });
+
 function footerMark() {
   const wm = $('.site-footer .wordmark');
   if (!wm) return;
-  $$('.wm-line', wm).forEach((l) => {
-    l.innerHTML = (l.textContent ?? '').split('').map((c) => `<span class="ch">${c}</span>`).join('');
-  });
+  splitChars(wm);
   if (reduce) return;
   gsap.fromTo($$('.ch', wm), { yPercent: 55, opacity: 0 }, {
     yPercent: 0, opacity: 1, duration: 1.1, ease: SPRING, stagger: 0.022,
@@ -616,6 +593,7 @@ function fluid() {
 
 smooth();
 footerMark(); // before fitText: splitting changes the measured width
+{ const lm = $('[data-loader-mark] .wordmark'); if (lm) splitChars(lm); }
 fitText();
 const heroMark = $('[data-hero] .wordmark');
 const willFlip = !reduce && !!heroMark && !!$('[data-loader-mark]') && !html.classList.contains('wipe-in');
