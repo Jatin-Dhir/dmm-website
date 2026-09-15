@@ -1,0 +1,48 @@
+---
+// Home services section (dark): small mark image, statement, CTA + marks, numbered rows.
+import Rail from './Rail.astro';
+import Pic from './Pic.astro';
+import LineLink from './LineLink.astro';
+import { services } from '../data/site';
+
+interface Props {
+  index: string;
+  of?: string;
+}
+const { index, of } = Astro.props;
+const featured = services.filter((s) => ['seo', 'social', 'branding', 'outdoor'].includes(s.slug));
+---
+
+<section class="section dark pad-top-lg" aria-labelledby="services-title">
+  <div class="wedge" data-wedge aria-hidden="true"></div>
+  <div class="wrap">
+    <Rail index={index} of={of} label="Services" id="services-title" />
+    <div class="svc-lead">
+      <div class="svc-mark" data-fade><Pic id="servicesMark" sizes="178px" widths={[356, 534]} alt="" /></div>
+      <p class="statement" data-lines data-dim-from="1">
+        Search, social, print and streets. One team, one weekly report.
+      </p>
+    </div>
+    <div class="svc-actions">
+      <LineLink href="/services/" data-fade>Explore More</LineLink>
+      <div class="plus-row" aria-hidden="true"><span class="plus"></span><span class="plus"></span><span class="plus"></span></div>
+    </div>
+    <div class="svc-rows">
+      {
+        featured.map((s, i) => (
+          <a class="svc-row" href={`/services/#${s.slug}`} data-fade data-cursor="Explore">
+            <span class="svc-num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+            <span class="svc-img" data-reveal><Pic id={s.image} sizes="405px" widths={[480, 810]} /></span>
+            <span class="svc-text">
+              <span class="svc-title">{s.name}</span>
+              <span class="svc-sub">
+                <span>{s.tag}</span>
+                <p>{s.line}</p>
+              </span>
+            </span>
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</section>

@@ -1,0 +1,116 @@
+---
+import Base from '../../layouts/Base.astro';
+import Pic from '../../components/Pic.astro';
+import Rail from '../../components/Rail.astro';
+import CaseCard from '../../components/CaseCard.astro';
+import { work, type CaseStudy, type Metric } from '../../data/work';
+import { testimonials } from '../../data/site';
+
+export function getStaticPaths() {
+  return work.map((study, i) => ({ params: { slug: study.slug }, props: { study, i } }));
+}
+
+interface Props {
+  study: CaseStudy;
+  i: number;
+}
+
+const { study, i } = Astro.props;
+const quote = study.quote ? testimonials.find((t) => t.name === study.quote) : undefined;
+const show = (m: Metric) => `${m.prefix ?? ''}${m.value}${m.suffix ?? ''}`;
+const others = [1, 2].map((k) => work[(i + k) % work.length]);
+const year = new Date().getFullYear();
+const title = study.project ? `${study.client}, ${study.project}` : study.client;
+---
+
+<Base title={`${title}, case study`} description={study.summary}>
+  <section class="phero" aria-labelledby="case-title">
+    <div class="phero-media is-blur"><Pic id={study.cover} eager sizes="(max-width: 899px) 260vw, (max-width: 1100px) 150vw, 100vw" widths={[800, 1200, 1600]} alt="" /></div>
+    <div class="phero-scrim" aria-hidden="true"></div>
+    <nav class="crumb" aria-label="Breadcrumb"><a href="/work/">Work</a> / <span aria-current="page">{study.client}</span></nav>
+    <div class="phero-center">
+      <h1 class="t-100" id="case-title" data-lines>{study.client}</h1>
+    </div>
+    <div class="phero-meta">
+      <span data-fade>{study.services.join(' + ')}</span>
+      <span class="m2" data-fade>{study.summary}</span>
+      <span class="m3" data-fade>© {year}</span>
+    </div>
+  </section>
+
+  <section class="section pad-top" aria-labelledby="brief-title">
+    <div class="wedge" data-wedge aria-hidden="true"></div>
+    <div class="wrap">
+      <Rail index="01" of="03" label="Brief" id="brief-title" />
+      <p class="statement" data-lines>{study.context}</p>
+      <div class="case-body">
+        <div class="case-notes">
+          <div class="case-note" data-fade>
+            <p>(Challenge)</p>
+            <ul>{study.challenge.map((c) => <li>{c}</li>)}</ul>
+          </div>
+          <div class="case-note" data-fade>
+            <p>(Approach)</p>
+            <ul>{study.approach.map((a) => <li>{a}</li>)}</ul>
+          </div>
+          <div class="case-note" data-fade>
+            <p>(Results)</p>
+            <dl class="kv">
+              {study.results.map((r) => <div><dt>{r.label}</dt><dd>{show(r)}</dd></div>)}
+            </dl>
+          </div>
+        </div>
+        <div class="case-gallery">
+          {study.gallery.map((id) => <figure data-reveal><Pic id={id} sizes="(min-width: 900px) 1000px, 220vw" widths={[800, 1200, 1600]} /></figure>)}
+          <figure data-reveal><Pic id={study.cover} sizes="(min-width: 900px) 1000px, 220vw" widths={[800, 1200, 1600]} /></figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section dark pad-top-lg" aria-labelledby="results-title">
+    <div class="wedge" data-wedge aria-hidden="true"></div>
+    <div class="wrap">
+      <Rail index="02" of="03" label="Results" id="results-title" />
+      <p class="statement" data-lines data-dim-from="2">{study.summary}</p>
+      <div class="results">
+        {
+          study.results.map((r) => (
+            <div class="stat" data-fade>
+              <span class="corner" aria-hidden="true" />
+              <p class="stat-n">{show(r)}</p>
+              <p class="stat-d">{r.label}</p>
+            </div>
+          ))
+        }
+      </div>
+      {
+        quote && (
+          <figure class="case-quote" data-fade>
+            <blockquote class="t-25">
+              <p>“{quote.quote}”</p>
+            </blockquote>
+            <figcaption class="t-12" style="margin-top: 24px">
+              {quote.name}, {quote.role}, {quote.company}
+            </figcaption>
+          </figure>
+        )
+      }
+    </div>
+  </section>
+
+  <section class="section pad-top" aria-labelledby="more-title">
+    <div class="wedge" data-wedge aria-hidden="true"></div>
+    <div class="wrap">
+      <Rail index="03" of="03" label="More work" id="more-title" />
+      <div class="work-grid">
+        {others.map((c, k) => <div data-fade><CaseCard study={c} index={k + 1} sizes="(min-width: 900px) 48vw, 100vw" /></div>)}
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style is:global>
+  .case-quote { margin-top: clamp(64px, 12vh, 140px); max-width: 1040px; margin-left: auto; }
+  .case-quote figcaption { color: var(--t-light-2); }
+</style>

@@ -1,0 +1,34 @@
+---
+// Client marquee: each name in display type with its case-study photo where one exists,
+// a violet diamond where it doesn't. Scrolls at roughly 60 px per second.
+import Pic from './Pic.astro';
+import { clients } from '../data/site';
+import { work } from '../data/work';
+
+const items = clients.map((name) => {
+  const first = name.split(' ')[0].toLowerCase();
+  const study = work.find((w) => w.client.toLowerCase().startsWith(first));
+  return { name, cover: study?.cover };
+});
+---
+
+<section class="ticker" aria-label="Clients we have worked with">
+  <div class="ticker-track" style={`--tk-dur: ${items.length * 6}s`}>
+    {
+      [0, 1].map((k) => (
+        <ul class="ticker-group" aria-hidden={k === 1 ? 'true' : undefined}>
+          {items.map((it) => (
+            <li class="tk-item">
+              {it.cover ? (
+                <span class="tk-thumb" aria-hidden="true"><Pic id={it.cover} sizes="72px" widths={[144, 216]} alt="" /></span>
+              ) : (
+                <span class="tk-mark" aria-hidden="true" />
+              )}
+              <span class="tk-name">{it.name}</span>
+            </li>
+          ))}
+        </ul>
+      ))
+    }
+  </div>
+</section>

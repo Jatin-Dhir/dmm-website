@@ -1,0 +1,78 @@
+---
+import Rail from './Rail.astro';
+import Pic from './Pic.astro';
+import { testimonials } from '../data/site';
+import { work } from '../data/work';
+
+interface Props {
+  index: string;
+  of?: string;
+}
+const { index, of } = Astro.props;
+const coverFor = (href?: string) => (href ? work.find((w) => `/work/${w.slug}/` === href)?.cover : undefined);
+---
+
+<section class="section dark pad-top" aria-labelledby="quotes-title">
+  <div class="wrap">
+    <Rail index={index} of={of} label="Testimonial" heading={false} />
+    <h2 class="section-title" id="quotes-title" data-lines data-dim-from="1">Clients, in their<br />own words.</h2>
+    <div class="quotes" data-slider aria-roledescription="carousel" aria-label="Client testimonials">
+      <div class="quotes-nav" data-fade>
+        <button class="qbtn" type="button" data-prev aria-label="Previous testimonial">
+          <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M10 3 5 8l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </button>
+        <button class="qbtn" type="button" data-next aria-label="Next testimonial">
+          <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="m6 3 5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </button>
+      </div>
+      <div class="slides" aria-live="polite">
+        {
+          testimonials.map((t, i) => {
+            const cover = coverFor(t.href);
+            return (
+              <figure class="slide" data-slide aria-roledescription="slide" aria-label={`${i + 1} of ${testimonials.length}`}>
+                <blockquote data-slide-part>
+                  <p>{t.quote}</p>
+                </blockquote>
+                <figcaption class="slide-foot" data-slide-part>
+                  <div>
+                    <div class="who">
+                      <span class="who-mark" aria-hidden="true">
+                        {cover ? <Pic id={cover} sizes="68px" widths={[136, 204]} alt="" /> : <span class="diamond" />}
+                      </span>
+                      <span>
+                        <span class="name">{t.name}</span>
+                        <br />
+                        <span class="role">
+                          {t.role}, {t.company}
+                        </span>
+                      </span>
+                    </div>
+                    {t.href && (
+                      <a class="who-link" href={t.href}>
+                        Read the case study
+                      </a>
+                    )}
+                  </div>
+                  {[t.metric, t.metric2].filter(Boolean).map((m) => (
+                    <div class="stat-sm">
+                      <span class="v">{m!.value}</span>
+                      <span class="l">{m!.label}</span>
+                      {m!.sub && <span class="s">{m!.sub}</span>}
+                    </div>
+                  ))}
+                  {!t.metric && (
+                    <div class="stat-sm">
+                      <span class="l">{t.sector ?? 'Marketing'}</span>
+                      <span class="s">{t.sectorLabel}</span>
+                    </div>
+                  )}
+                </figcaption>
+              </figure>
+            );
+          })
+        }
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,47 @@
+---
+// Home portfolio: sticky year tag left, stacked cards centre, "See all" pill right.
+import Rail from './Rail.astro';
+import Pic from './Pic.astro';
+import CaseCard from './CaseCard.astro';
+import LineLink from './LineLink.astro';
+import { featuredWork, work } from '../data/work';
+
+interface Props {
+  index: string;
+  of?: string;
+}
+const { index, of } = Astro.props;
+const year = String(new Date().getFullYear()).slice(2);
+---
+
+<section class="section pad-top" id="work" aria-labelledby="work-title">
+  <div class="wrap">
+    <Rail index={index} of={of} label="Work" heading={false} />
+    <h2 class="section-title" id="work-title" data-lines data-dim-from="1">Work that walked<br />through the door.</h2>
+    <div class="stack-layout">
+      <div class="stack-side">
+        <div class="stack-side-inner">
+          <p class="t-56">DMM-{year}’</p>
+          <LineLink href="/contact/">Start a project</LineLink>
+        </div>
+      </div>
+      <div class="stack-cards">
+        {
+          featuredWork.map((c, i) => (
+            <article class="stack-card" style={`--i: ${i}`} data-stack-card>
+              <CaseCard study={c} index={i + 1} />
+            </article>
+          ))
+        }
+      </div>
+      <div class="stack-side">
+        <div class="stack-side-inner" style="align-items: flex-end">
+          <a class="pill" href="/work/" data-magnetic>
+            <span class="pill-thumb" aria-hidden="true"><Pic id={work[featuredWork.length]?.cover ?? work[0].cover} sizes="64px" widths={[128]} alt="" /></span>
+            See all ({String(work.length).padStart(2, '0')})
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

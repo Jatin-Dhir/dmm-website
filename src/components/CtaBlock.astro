@@ -1,0 +1,26 @@
+---
+// Results tape: the headline number of every case study runs across a night-city photo.
+import Pic from './Pic.astro';
+import LineLink from './LineLink.astro';
+import { work } from '../data/work';
+
+const phrases = work.map((w) => `${w.headline.prefix ?? ''}${w.headline.value}${w.headline.suffix ?? ''} ${w.headline.label} — ${w.client}`);
+---
+
+<section class="lblock" aria-labelledby="lblock-title">
+  <div class="lbox">
+    <div class="lbg" data-parallax aria-hidden="true"><Pic id="ctaBg" sizes="(max-width: 899px) 260vw, (max-width: 1100px) 150vw, 100vw" widths={[800, 1200, 1600, 2000]} alt="" /></div>
+    <h2 class="sr-only" id="lblock-title">Results our clients reported</h2>
+    <div class="lrow" aria-hidden="true">
+      <div class="plus-col"><span class="plus"></span><span class="plus"></span></div>
+      <div class="marquee" data-marquee>
+        <div class="mq-track" style="--mq-dur: 52s">
+          {[0, 1].map(() => <div class="mq-group">{phrases.map((p) => <span class="mq-item">{p}<i class="mq-dot" /></span>)}</div>)}
+        </div>
+      </div>
+      <div class="plus-col"><span class="plus"></span><span class="plus"></span></div>
+    </div>
+    <div class="linset" aria-hidden="true"><Pic id="ctaInset" sizes="448px" widths={[672, 1000]} alt="" /></div>
+    <div class="lcta"><LineLink href="/contact/">Start a project</LineLink></div>
+  </div>
+</section>

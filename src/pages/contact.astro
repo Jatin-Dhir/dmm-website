@@ -1,0 +1,64 @@
+---
+import Base from '../layouts/Base.astro';
+import { services, site } from '../data/site';
+---
+
+<Base title="Contact" description="Talk to DMM about your next campaign. WhatsApp, call or email the Ludhiana team, or send a brief from this page.">
+  <section class="contact" aria-labelledby="contact-title">
+    <div class="wrap">
+      <div class="contact-top">
+        <p class="foot-kicker" data-fade>Let’s work together</p>
+        <h1 class="foot-email" id="contact-title" data-fade>{site.email}</h1>
+      </div>
+
+      <div class="contact-grid">
+        <form class="form" data-contact-form data-whatsapp={site.whatsapp} data-email={site.email} action={`mailto:${site.email}`} method="post" enctype="text/plain" novalidate>
+          <div class="field">
+            <label for="f-name">Your name</label>
+            <input id="f-name" name="name" autocomplete="name" required aria-describedby="e-name" data-error="Add your name so we know who to reply to." />
+            <p class="error" id="e-name"></p>
+          </div>
+          <div class="field">
+            <label for="f-business">Business name <span class="hint">(optional)</span></label>
+            <input id="f-business" name="business" autocomplete="organization" />
+          </div>
+          <div class="field">
+            <label for="f-reply">Phone or email</label>
+            <input id="f-reply" name="reply" required aria-describedby="e-reply" data-error="Add a phone number or email so we can reply." />
+            <p class="error" id="e-reply"></p>
+          </div>
+          <fieldset class="field">
+            <legend>What do you need? <span class="hint">(choose any)</span></legend>
+            <div class="checks">
+              {services.map((s) => <label class="check"><input type="checkbox" name="needs" value={s.name} /><span>{s.name}</span></label>)}
+            </div>
+          </fieldset>
+          <div class="field">
+            <label for="f-message">Tell us more <span class="hint">(optional)</span></label>
+            <textarea id="f-message" name="message" rows="4" placeholder="Your goals, timeline or budget"></textarea>
+          </div>
+          <div class="form-actions">
+            <button class="btn" type="submit" value="whatsapp">Send on WhatsApp</button>
+            <button class="btn btn-ghost" type="submit" value="email">Send by email</button>
+          </div>
+          <p class="form-status" data-form-status role="status"></p>
+        </form>
+
+        <aside class="contact-info" aria-label="Contact details">
+          <div class="info-block"><h2>(Email)</h2><a href={`mailto:${site.email}`}>{site.email}</a></div>
+          <div class="info-block"><h2>(Phone and WhatsApp)</h2><a href={site.phoneHref}>{site.phone}</a></div>
+          <div class="info-block">
+            <h2>(Office)</h2>
+            <p>{site.address.street}<br />{site.address.city}, {site.address.region} {site.address.postcode}</p>
+            <a href={site.mapUrl} target="_blank" rel="noopener" class="dim">Open in Google Maps</a>
+          </div>
+          <div class="info-block"><h2>(Hours)</h2><p>{site.hours} IST</p></div>
+          <div class="info-block">
+            <h2>(Follow)</h2>
+            <p style="display: flex; gap: 16px">{site.socials.map((s) => <a href={s.href} target="_blank" rel="noopener">{s.label}</a>)}</p>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+</Base>

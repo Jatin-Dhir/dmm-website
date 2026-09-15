@@ -1,0 +1,15 @@
+---
+// Underlined text link with the small corner mark (the reference's primary CTA style).
+interface Props {
+  href: string;
+  class?: string;
+  [key: string]: unknown;
+}
+const { href, class: className, ...rest } = Astro.props;
+const external = /^https?:/.test(href);
+---
+
+<a class:list={['line-link', className]} href={href} {...(external ? { target: '_blank', rel: 'noopener' } : {})} {...rest}>
+  <slot />
+  <span class="corner" aria-hidden="true"></span>
+</a>

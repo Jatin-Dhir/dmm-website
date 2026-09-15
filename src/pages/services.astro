@@ -1,0 +1,75 @@
+---
+import Base from '../layouts/Base.astro';
+import Pic from '../components/Pic.astro';
+import Rail from '../components/Rail.astro';
+import CtaBlock from '../components/CtaBlock.astro';
+import { faqs, services } from '../data/site';
+
+const year = new Date().getFullYear();
+---
+
+<Base title="Services" description="SEO and GEO, social media, performance ads, branding, outdoor and print advertising, websites and content, planned and measured by one in-house team in Ludhiana.">
+  <section class="phero" aria-labelledby="services-title">
+    <div class="phero-media"><Pic id="servicesHero" eager sizes="(max-width: 899px) 260vw, (max-width: 1100px) 150vw, 100vw" widths={[800, 1200, 1600, 2000, 2400]} alt="" /></div>
+    <div class="phero-scrim" aria-hidden="true"></div>
+    <div class="phero-bottom">
+      <h1 class="t-100" id="services-title" data-lines>Premium<br />Services<sup aria-hidden="true">({String(services.length).padStart(2, '0')})</sup></h1>
+      <p class="phero-note" data-fade>One in-house team for search, social, streets and screens, planned together and measured in revenue.</p>
+      <p class="phero-year" data-fade>© {year}</p>
+    </div>
+  </section>
+
+  <section class="section pad-top" aria-labelledby="svc-list-title">
+    <div class="wedge" data-wedge aria-hidden="true"></div>
+    <div class="wrap">
+      <Rail index="01" of="02" label="Services" id="svc-list-title" />
+      <p class="statement" data-lines>We don’t sell hours or posts. We sell the outcome each channel is supposed to produce, and we show the numbers every week.</p>
+      <div class="rows">
+        {
+          services.map((s, i) => (
+            <div class="row" id={s.slug} data-fade>
+              <span class="row-n">{String(i + 1).padStart(3, '0')}</span>
+              <h2 class="row-t">{s.name}</h2>
+              <div class="row-body">
+                <p>{s.body}</p>
+                <div class="row-inc">
+                  <p class="row-inc-title">What’s included</p>
+                  <ul>
+                    {s.deliverables.map((d) => (
+                      <li>{d}</li>
+                    ))}
+                  </ul>
+                </div>
+                {s.proof && (
+                  <a class="t-12" href={s.proof.href} style="text-decoration: underline; text-underline-offset: 3px">
+                    {s.proof.value} {s.proof.label}
+                  </a>
+                )}
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section pad-top" aria-labelledby="faq-title">
+    <div class="wrap">
+      <Rail index="02" of="02" label="Questions" id="faq-title" />
+      <div class="faq">
+        {
+          faqs.map((f) => (
+            <details>
+              <summary>{f.q}</summary>
+              <div class="answer">
+                <p>{f.a}</p>
+              </div>
+            </details>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <CtaBlock />
+</Base>

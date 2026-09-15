@@ -1,0 +1,41 @@
+---
+import Wordmark from './Wordmark.astro';
+import LineLink from './LineLink.astro';
+import { nav, site } from '../data/site';
+
+const path = Astro.url.pathname;
+const year = new Date().getFullYear();
+const links = [{ label: 'Home', href: '/' }, ...nav];
+const isCurrent = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
+---
+
+<footer class="site-footer">
+  <div class="wedge" data-wedge aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="foot-top">
+      <div>
+        <p class="foot-kicker">Let’s work together</p>
+        <a class="foot-email" href={`mailto:${site.email}`}>{site.email}</a>
+        <div class="foot-cta"><LineLink href="/contact/">Contact Now</LineLink></div>
+      </div>
+      <nav class="foot-nav" aria-label="Footer">
+        {
+          links.map((item, i) => (
+            <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>
+              {item.label}
+              <sup aria-hidden="true">{String(i + 1).padStart(2, '0')}</sup>
+            </a>
+          ))
+        }
+      </nav>
+    </div>
+    <div class="foot-marks" aria-hidden="true"><span class="plus"></span><span class="plus"></span><span class="plus"></span></div>
+    <div class="foot-bottom">
+      <div>
+        <Wordmark />
+        <p class="foot-legal">{site.address.street}, {site.address.city} {site.address.postcode} · {site.legal}</p>
+      </div>
+      <span class="ruler"><span>© {year}</span><span class="ruler-ticks" aria-hidden="true">{Array.from({ length: 9 }).map(() => <i></i>)}</span><span>{String(year).slice(2)}’</span></span>
+    </div>
+  </div>
+</footer>

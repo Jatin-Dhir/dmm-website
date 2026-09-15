@@ -1,0 +1,37 @@
+---
+// Responsive picture built at compile time: AVIF + WebP sources with a JPEG fallback.
+import { Picture } from 'astro:assets';
+import { asset, images } from '../data/images';
+
+interface Props {
+  id: string;
+  sizes?: string;
+  alt?: string;
+  eager?: boolean;
+  widths?: number[];
+  class?: string;
+  [key: string]: unknown;
+}
+
+const { id, sizes = '100vw', alt, eager = false, widths = [480, 800, 1200, 1600, 2000], class: className, ...rest } = Astro.props;
+const img = images[id];
+const src = asset(id);
+const ws = widths.filter((w) => w <= src.width);
+if (!ws.includes(src.width)) ws.push(src.width);
+---
+
+<Picture
+  src={src}
+  formats={['avif', 'webp']}
+  fallbackFormat="jpg"
+  widths={ws}
+  sizes={sizes}
+  alt={alt ?? img.alt}
+  class={className}
+  loading={eager ? 'eager' : 'lazy'}
+  fetchpriority={eager ? 'high' : 'auto'}
+  decoding="async"
+  style={img.focus ? `object-position: ${img.focus}` : undefined}
+  data-placeholder={import.meta.env.DEV && img.placeholder ? '' : undefined}
+  {...rest}
+/>

@@ -1,0 +1,29 @@
+---
+import Rail from './Rail.astro';
+import { numbers } from '../data/site';
+
+interface Props {
+  index: string;
+  of?: string;
+}
+const { index, of } = Astro.props;
+---
+
+<section class="section pad-top" aria-labelledby="stats-title">
+  <div class="wrap">
+    <Rail index={index} of={of} label="Numbers" heading={false} />
+    <h2 class="section-title" id="stats-title" data-lines data-dim-from="1">Numbers we’re<br />held to.</h2>
+    <div class="stats">
+      {
+        numbers.map((n) => (
+          <div class="stat" data-fade>
+            <span class="corner" aria-hidden="true" />
+            <p class="stat-pre">{n.pre ?? ' '}</p>
+            <p class="stat-n">{n.big}{n.unit}</p>
+            <h3 class="stat-t">{n.label}</h3>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

@@ -1,0 +1,114 @@
+---
+import Base from '../layouts/Base.astro';
+import Pic from '../components/Pic.astro';
+import Rail from '../components/Rail.astro';
+import Stats from '../components/Stats.astro';
+import CtaBlock from '../components/CtaBlock.astro';
+import { industries, process, site, values } from '../data/site';
+
+const year = new Date().getFullYear();
+---
+
+<Base title="About" description="Dev Marketing Mind is a Ludhiana marketing agency with one primary KPI: revenue. Meet the team's approach, process and the industries we know best.">
+  <section class="phero" aria-labelledby="about-title">
+    <div class="phero-card-wrap"><div class="phero-card"><Pic id="aboutHero" eager sizes="(min-width: 900px) 925px, 100vw" widths={[800, 1200, 1850]} alt="" /></div></div>
+    <div class="phero-center">
+      <h1 class="t-100" id="about-title" data-lines>We Are Here</h1>
+    </div>
+    <div class="phero-card-meta">
+      <span data-fade>(Our Studio)</span>
+      <span class="m2" data-fade>One in-house team in Ludhiana, dedicated to your continuous stream of campaigns.</span>
+      <span class="m3" data-fade>© {year}</span>
+    </div>
+  </section>
+
+  <section class="section pad-top" aria-labelledby="process-title">
+    <div class="wedge" data-wedge aria-hidden="true"></div>
+    <div class="wrap">
+      <Rail index="01" of="03" label="Process" id="process-title" />
+      <p class="statement" data-lines>We don’t take every brief. We take the ones where the business deserves to be marketed without compromise.</p>
+      <figure class="big-figure" data-reveal><Pic id="aboutFigure" sizes="100vw" widths={[800, 1200, 1600, 2000]} /></figure>
+      <ol class="rows">
+        {
+          process.map((p, i) => (
+            <li class="row" data-fade>
+              <span class="row-n">{String(i + 1).padStart(3, '0')}</span>
+              <h3 class="row-t">{p.title}</h3>
+              <div class="row-body">
+                <p>{p.body}</p>
+                <div class="row-inc">
+                  <p class="row-inc-title">What’s included</p>
+                  <ul>
+                    {p.includes.map((x) => (
+                      <li>{x}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="section dark pad-top-lg" aria-labelledby="values-title">
+    <div class="wedge" data-wedge aria-hidden="true"></div>
+    <div class="wrap">
+      <Rail index="02" of="03" label="Difference" id="values-title" />
+      <p class="statement" data-lines data-dim-from="2">Marketing is full of big promises and little execution. We have one primary KPI, and it is the one that reaches your bank account.</p>
+      <div class="values">
+        {
+          values.map((v) => (
+            <div class="value" data-fade>
+              <h3>{v.title}</h3>
+              <p>{v.body}</p>
+            </div>
+          ))
+        }
+      </div>
+      <div class="founder" data-fade>
+        <p class="t-12">({site.founder.name}, {site.founder.role})</p>
+        <p class="t-25">We are a growth partner, not a vendor. Our writers, SEO specialists, social strategists, video editors and developers work under one roof, so strategy, creative and reporting never get lost between agencies.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section pad-top" aria-labelledby="industries-title">
+    <div class="wedge" data-wedge aria-hidden="true"></div>
+    <div class="wrap">
+      <Rail index="03" of="03" label="Industries" id="industries-title" />
+      <div class="rows" style="margin-top: clamp(40px, 7vh, 80px)">
+        {
+          industries.map((ind, i) => (
+            <div class="row row-sm" data-fade>
+              <span class="row-n">{String(i + 1).padStart(3, '0')}</span>
+              <h3 class="row-t row-t-sm">{ind.name}</h3>
+              <div class="row-body">
+                <p>{ind.body}</p>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <Stats index="04" />
+  <CtaBlock />
+</Base>
+
+<style is:global>
+  .values { margin-top: clamp(56px, 10vh, 120px); border-top: 1px solid var(--line-d); display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 40px; }
+  .value { padding: 28px 0 40px; border-bottom: 1px solid var(--line-d); }
+  .value h3 { font-size: var(--fs-16); }
+  .value p { margin-top: 10px; color: var(--t-light-2); max-width: 320px; }
+  .founder { margin-top: clamp(64px, 12vh, 140px); display: grid; grid-template-columns: 300px minmax(0, 1fr); column-gap: 40px; align-items: start; }
+  .founder .t-25 { max-width: 760px; }
+  .row-sm { padding-block: 28px; }
+  .row-t-sm { font-size: var(--fs-25); line-height: 1.2; letter-spacing: -0.04em; font-weight: 700; }
+  @media (max-width: 899px) {
+    .values { grid-template-columns: minmax(0, 1fr); }
+    .founder { grid-template-columns: minmax(0, 1fr); row-gap: 16px; }
+  }
+</style>

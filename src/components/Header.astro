@@ -1,0 +1,65 @@
+---
+import { nav, site, whatsappLink } from '../data/site';
+
+const path = Astro.url.pathname;
+const isCurrent = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
+const links = [{ label: 'Home', href: '/' }, ...nav];
+---
+
+<header class="site-header" data-header>
+  <a class="brand" href="/" aria-label={`${site.name}, home`}>
+    <span class="brand-mark" aria-hidden="true">DMM</span>
+    <span class="brand-name" aria-hidden="true">{site.name}</span>
+  </a>
+  <nav class="primary" aria-label="Primary">
+    <ul>
+      {
+        links.map((item, i) => (
+          <li>
+            <a class="nav-link" href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>
+              {item.label}
+              <sup aria-hidden="true">{String(i + 1).padStart(2, '0')}</sup>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+  <button class="menu-btn" type="button" aria-expanded="false" aria-controls="site-menu" data-menu-open>
+    <i aria-hidden="true"></i><i aria-hidden="true"></i>
+    <span class="sr-only">Open menu</span>
+  </button>
+
+  <div class="menu" id="site-menu" data-menu data-lenis-prevent hidden>
+    <div class="menu-inner">
+      <div class="menu-top">
+        <span class="brand-mark">DMM</span>
+        <button class="menu-close" type="button" data-menu-close>Close</button>
+      </div>
+      <ul class="menu-links">
+        {
+          links.map((item, i) => (
+            <li>
+              <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>
+                {item.label}
+                <sup aria-hidden="true">{String(i + 1).padStart(2, '0')}</sup>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <div class="menu-contact">
+        <a href={`mailto:${site.email}`}>{site.email}</a>
+        <a href={site.phoneHref}>{site.phone}</a>
+        <span class="dim">{site.address.city}, {site.address.region}</span>
+        <a class="btn" href={whatsappLink()} target="_blank" rel="noopener" style="margin-top: 12px">WhatsApp us</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<style is:global>
+  html:not(.js) .site-header .primary { display: block; }
+  html:not(.js) .site-header .primary ul { flex-wrap: wrap; gap: 12px 20px; }
+  html:not(.js) .site-header .menu-btn { display: none; }
+</style>

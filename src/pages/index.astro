@@ -1,0 +1,100 @@
+---
+import { getImage } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import Pic from '../components/Pic.astro';
+import Rail from '../components/Rail.astro';
+import Wordmark from '../components/Wordmark.astro';
+import LineLink from '../components/LineLink.astro';
+import WorkStack from '../components/WorkStack.astro';
+import ServicesFeature from '../components/ServicesFeature.astro';
+import Testimonials from '../components/Testimonials.astro';
+import CtaBlock from '../components/CtaBlock.astro';
+import Ticker from '../components/Ticker.astro';
+import Stats from '../components/Stats.astro';
+import { heroDisciplines, site } from '../data/site';
+import { asset } from '../data/images';
+
+const heroAvif = await getImage({ src: asset('hero'), format: 'avif', widths: [800, 1200, 1600, 2000, 2400], sizes: '100vw' });
+const heroForCanvas = await getImage({ src: asset('hero'), format: 'webp', width: 1600 });
+---
+
+<Base>
+  <Fragment slot="head">
+    <link rel="preload" as="image" type="image/avif" imagesrcset={heroAvif.srcSet.attribute} imagesizes="(max-width: 899px) 250vw, 100vw" />
+  </Fragment>
+
+  <section class="hero" data-hero data-fluid-src={heroForCanvas.src} aria-label="Introduction">
+    <div class="hero-move">
+      <div class="hero-media" data-hero-media>
+        <Pic id="hero" eager sizes="(max-width: 899px) 250vw, 100vw" widths={[800, 1200, 1600, 2000, 2400]} />
+      </div>
+      <div class="hero-scrim" aria-hidden="true"></div>
+      <div class="hero-inner">
+        <div class="hero-top">
+          <p class="hero-hook" data-lines>Marketing measured in<br />calls, walk-ins and sales.</p>
+          <LineLink href="#work" data-in>See the results</LineLink>
+        </div>
+
+        <ul class="hero-list" aria-label="What we do">
+          {
+            heroDisciplines.map((d, i) => (
+              <li data-in>
+                {i === 0 && <span class="idx" aria-hidden="true">01/</span>}
+                <a href={d.href}>{d.label}</a>
+              </li>
+            ))
+          }
+        </ul>
+
+        <div class="hero-marks" aria-hidden="true">
+          {[0, 1, 2, 3].map(() => <span class="mark" data-mark><span class="plus" /></span>)}
+        </div>
+
+        <div class="hero-bottom">
+          <p class="hero-place" data-in>
+            <span>{site.address.city}, {site.address.region}</span><span class="dot" aria-hidden="true"></span><span>{site.coordinates}</span><span class="dot" aria-hidden="true"></span><span><time data-clock>10:00</time> IST</span>
+          </p>
+          <Wordmark as="h1" label={`${site.name}, a 360° marketing agency in Ludhiana, Punjab`} data-in />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section pad-top-sm" id="about" aria-labelledby="about-title">
+    <div class="wedge" data-wedge aria-hidden="true"></div>
+    <div class="wrap">
+      <Rail index="01" of="05" label="About" id="about-title" />
+      <p class="statement" data-lines>
+        Ludhiana’s businesses, made impossible to ignore.
+      </p>
+      <div class="ledger">
+        <figure class="ledger-media" data-reveal><Pic id="ledger" sizes="(min-width: 900px) 328px, 100vw" widths={[480, 800]} /></figure>
+        <div class="ledger-rows">
+          <div class="ledger-row" data-fade>
+            <p class="ledger-key">(Pre)</p>
+            <p class="ledger-val">A website Google ignores. Hoardings nobody remembers. A budget that disappears.</p>
+          </div>
+          <div class="ledger-row" data-fade>
+            <p class="ledger-key">(+Post)</p>
+            <p class="ledger-val">A brand people recognise. Search results you own. A weekly report of what came back.</p>
+          </div>
+          <div class="ledger-row" data-fade>
+            <p class="ledger-key">(=Results)</p>
+            <dl class="kv">
+              <div><dt>Inquiries</dt><dd>Immediate</dd></div>
+              <div><dt>Brand recognition</dt><dd>Permanent</dd></div>
+            </dl>
+          </div>
+        </div>
+      </div>
+      <div class="ledger-cta" data-fade><LineLink href="/about/">Explore Now</LineLink></div>
+    </div>
+  </section>
+
+  <WorkStack index="02" of="05" />
+  <ServicesFeature index="03" of="05" />
+  <Testimonials index="04" of="05" />
+  <CtaBlock />
+  <Ticker />
+  <Stats index="05" of="05" />
+</Base>

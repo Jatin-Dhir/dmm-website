@@ -1,0 +1,98 @@
+---
+import '@fontsource-variable/archivo/wdth.css';
+import '@fontsource-variable/jetbrains-mono/wght.css';
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Loader from '../components/Loader.astro';
+import { site } from '../data/site';
+import fontUrl from '@fontsource-variable/archivo/files/archivo-latin-wdth-normal.woff2?url';
+import monoUrl from '@fontsource-variable/jetbrains-mono/files/jetbrains-mono-latin-wght-normal.woff2?url';
+
+interface Props {
+  title?: string;
+  description?: string;
+  ogImage?: string;
+  footer?: boolean;
+}
+
+const { title, description = site.description, ogImage, footer = true } = Astro.props;
+const pageTitle = title ? `${title} | DMM, ${site.name}` : site.title;
+const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url).href;
+
+const organisation = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfessionalService',
+  name: site.name,
+  alternateName: site.short,
+  url: site.url,
+  email: site.email,
+  telephone: site.phone.replace(/\s/g, ''),
+  description: site.description,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: site.address.street,
+    addressLocality: site.address.city,
+    addressRegion: site.address.region,
+    postalCode: site.address.postcode,
+    addressCountry: 'IN',
+  },
+  openingHoursSpecification: [{ '@type': 'OpeningHoursSpecification', dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'], opens: '10:00', closes: '18:00' }],
+  founder: { '@type': 'Person', name: site.founder.name, jobTitle: site.founder.role },
+  sameAs: site.socials.map((s) => s.href),
+  areaServed: 'IN',
+};
+---
+
+<!doctype html>
+<html lang="en-IN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta name="theme-color" content="#111111" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    {ogImage && <meta property="og:image" content={ogImage} />}
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preload" href={fontUrl} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={monoUrl} as="font" type="font/woff2" crossorigin />
+    <script is:inline>
+      document.documentElement.classList.add('js');
+      // arriving through the page wipe: keep the cover up until motion.ts opens it
+      try {
+        if (sessionStorage.getItem('dmm:wipe')) {
+          sessionStorage.removeItem('dmm:wipe');
+          document.documentElement.classList.add('wipe-in');
+        }
+      } catch (e) {}
+      setTimeout(function () {
+        if (!document.documentElement.classList.contains('motion-ready')) document.documentElement.classList.add('motion-off');
+      }, 1500);
+    </script>
+    <script type="application/ld+json" set:html={JSON.stringify(organisation)} />
+    <slot name="head" />
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <Loader />
+    <div class="cursor is-hidden" data-cursor-root aria-hidden="true">
+      <span class="cursor-dot"></span>
+      <span class="cursor-ring"><span class="cursor-text" data-cursor-text></span></span>
+    </div>
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
+    {footer && <Footer />}
+    <script>
+      import '../scripts/motion.ts';
+    </script>
+  </body>
+</html>

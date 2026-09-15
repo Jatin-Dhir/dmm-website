@@ -1,0 +1,19 @@
+---
+// Section rail, set in the data voice: ◆ 01   About   01 / 05
+interface Props {
+  index: string;
+  label: string;
+  of?: string;
+  id?: string;
+  heading?: boolean;
+  class?: string;
+}
+const { index, label, of, id, heading = true, class: className } = Astro.props;
+const Label = heading ? 'h2' : 'span';
+---
+
+<div class:list={['rail', className]} data-fade>
+  <span class="rail-index"><span class="diamond" aria-hidden="true"></span>{index}</span>
+  <Label class="rail-label" id={id}>{label}</Label>
+  <span class="rail-of">{of ? `${index} / ${of}` : ''}</span>
+</div>

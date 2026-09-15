@@ -1,0 +1,26 @@
+---
+// Portfolio card: the photo full-bleed, the campaign's headline result printed on it, caption below.
+import Pic from './Pic.astro';
+import type { CaseStudy } from '../data/work';
+
+interface Props {
+  study: CaseStudy;
+  index: number;
+  sizes?: string;
+}
+const { study, index, sizes = '(min-width: 900px) 800px, 100vw' } = Astro.props;
+const h = study.headline;
+---
+
+<a class="card" href={`/work/${study.slug}/`} data-cursor="View">
+  <div class="card-top">
+    <div class="card-photo"><Pic id={study.cover} sizes={sizes} widths={[480, 800, 1200]} /></div>
+    <span class="card-shade" aria-hidden="true"></span>
+    <span class="card-tag meta">{String(index).padStart(2, '0')}</span>
+    <p class="card-result"><b>{h.prefix}{h.value}{h.suffix}</b><span>{h.label}</span></p>
+  </div>
+  <div class="card-cap">
+    <span class="cap-title">{study.client}{study.project && `, ${study.project}`}</span>
+    <span class="cap-cat">{study.services.join(' + ')}</span>
+  </div>
+</a>

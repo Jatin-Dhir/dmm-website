@@ -1,0 +1,37 @@
+---
+import Base from '../../layouts/Base.astro';
+import Pic from '../../components/Pic.astro';
+import Rail from '../../components/Rail.astro';
+import CaseCard from '../../components/CaseCard.astro';
+import { work } from '../../data/work';
+
+const year = new Date().getFullYear();
+---
+
+<Base title="Work" description="Case studies from DMM: real estate launches, fashion e-commerce SEO, wedding venues and more, with the results our clients reported.">
+  <section class="phero" aria-labelledby="work-title">
+    <div class="phero-media"><Pic id="workHero" eager sizes="(max-width: 899px) 260vw, (max-width: 1100px) 150vw, 100vw" widths={[800, 1200, 1600, 2000, 2400]} alt="" /></div>
+    <div class="phero-scrim" aria-hidden="true"></div>
+    <div class="phero-bottom">
+      <h1 class="t-100" id="work-title" data-lines>Latest<br />Work<sup aria-hidden="true">({String(work.length).padStart(2, '0')})</sup></h1>
+      <p class="phero-note" data-fade>A curated collection of campaigns for developers, brands and venues, with the numbers they moved.</p>
+      <p class="phero-year" data-fade>© {year}</p>
+    </div>
+  </section>
+
+  <section class="section pad-top" aria-labelledby="all-work">
+    <div class="wedge" data-wedge aria-hidden="true"></div>
+    <div class="wrap">
+      <Rail index="01" of="01" label="All work" id="all-work" />
+      <div class="work-grid">
+        {
+          work.map((c, i) => (
+            <div data-fade>
+              <CaseCard study={c} index={i + 1} sizes="(min-width: 900px) 48vw, 100vw" />
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</Base>

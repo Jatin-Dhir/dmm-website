@@ -1,0 +1,22 @@
+---
+// The brand name set as a wide billboard; motion.ts fits it to its container width.
+import { site } from '../data/site';
+
+interface Props {
+  as?: 'h1' | 'p';
+  label?: string;
+  class?: string;
+  [key: string]: unknown;
+}
+const { as: Tag = 'p', label, class: className, ...rest } = Astro.props;
+const words = site.name.split(' ');
+---
+
+<Tag class:list={['wordmark', className]} data-fit aria-hidden={label ? undefined : 'true'} {...rest}>
+  {label && <span class="sr-only">{label}</span>}
+  <span class="wm-inner" aria-hidden="true">{words.map((w) => <span class="wm-line">{w}</span>)}</span>
+</Tag>
+
+<style is:global>
+  .wm-inner { display: inline-block; }
+</style>
