@@ -609,7 +609,7 @@ function fluid() {
   if (!hero || !media || !src) return;
   if (!fine || reduce) return;
   // loaded on demand so the main bundle stays small on devices that never use it
-  const start = () => import('./fluid').then(({ mountFluid }) => mountFluid(media, src, { cursorSize: 1.4, cursorPower: 0.7, distortion: 0.6, resolution: 5, tint: [0.16, 0.08, 0.3], dispersion: 0.18, shine: 0.3 }));
+  const start = () => import('./fluid').then(({ mountFluid }) => mountFluid(media, src, { cursorSize: 1.4, cursorPower: 0.7, distortion: 0.6, resolution: 5, tint: [0.09, 0.04, 0.18], dispersion: 0.18, shine: 0.3 }));
   if ('requestIdleCallback' in window) (window as Window & { requestIdleCallback: (cb: () => void) => void }).requestIdleCallback(start);
   else setTimeout(start, 600);
 }
