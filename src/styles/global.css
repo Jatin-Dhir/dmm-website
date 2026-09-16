@@ -245,7 +245,7 @@ ul, ol { padding: 0; list-style: none; }
 .statement { font-size: var(--fs-70); line-height: 1; letter-spacing: -0.03em; font-weight: 500; text-indent: 0; text-wrap: pretty; margin-top: clamp(64px, 10vh, 120px); max-width: 16ch; }
 [data-lines] .ln { display: block; overflow: hidden; padding-bottom: 0.06em; margin-bottom: -0.06em; text-indent: 0; }
 [data-lines] .ln > span { display: block; }
-[data-lines] .w { display: inline-block; }
+[data-lines] .w { display: inline-block; text-indent: 0; } /* inline-blocks would inherit the statement indent */
 .statement .ln:first-child { text-indent: inherit; }
 .statement .dimline { color: var(--t-dark-2); }
 .dark .statement .dimline { color: var(--t-light-2); }
@@ -749,3 +749,113 @@ html { scrollbar-width: thin; scrollbar-color: rgba(137, 45, 235, 0.7) transpare
 /* loader v3: the wordmark's letters rise; the count sits top-right */
 .loader-ui { grid-template-rows: auto; }
 .loader-mark .ch { display: inline-block; }
+
+/* ==========================================================================
+   Brand refresh: DMM orange (#cc6c32), warm ink instead of black, paper-first
+   sections, fewer marks, a content container for large screens
+   ========================================================================== */
+:root {
+  --brand: #cc6c32;
+  --brand-soft: #e2905a;
+  --mark: #f3d3bb;
+  --ink: #1b1512;
+  --ink-2: #2a221d;
+  --t-dark: #1b1512;
+  --t-dark-2: rgba(27, 21, 18, 0.64);
+  --line-l: rgba(27, 21, 18, 0.12);
+  --paper: #f6f2ec;
+  --paper-2: #ede6dc;
+  --gutter: clamp(24px, 2.4vw, 56px);
+  --max: 1680px;
+}
+/* content stops stretching past 1680px; gutters grow with the screen */
+.wrap { max-width: var(--max); margin-inline: auto; }
+.hero-inner { left: 50%; right: auto; width: min(100%, var(--max)); transform: translateX(-50%); }
+.hero .wordmark { max-width: clamp(1060px, 44vw, 1400px); }
+.site-header { inset-inline: max(10px, calc((100% - var(--max)) / 2 - 14px)); }
+.lbox { max-width: var(--max); margin-inline: auto; }
+
+/* orange wherever violet was */
+.svc-sub > span { color: var(--brand); }
+.card:hover .card-result b, .nav-link:hover sup, .menu-links a:hover sup, .foot-nav a:hover sup, .who-link:hover, .foot-email:hover, .info-block a:hover, .nf-code { color: var(--brand-soft); }
+.field:focus-within label, .field:focus-within legend { color: var(--brand); }
+html { scrollbar-color: rgba(204, 108, 50, 0.7) transparent; }
+::-webkit-scrollbar-thumb { background: rgba(204, 108, 50, 0.7); }
+.card-top::after, .svc-img::after, .ledger-media::after, .linset::after, .big-figure::after, .case-gallery figure::after, .pill-thumb::after, .phero-card::after, .svc-mark::after, .tk-thumb::after {
+  background: linear-gradient(160deg, rgba(204, 108, 50, 0.34), rgba(255, 186, 120, 0.16) 55%, rgba(27, 21, 18, 0.4));
+}
+.hero-scrim { background: linear-gradient(90deg, rgba(27, 21, 18, 0.7), rgba(27, 21, 18, 0.28) 40%, rgba(27, 21, 18, 0) 62%), linear-gradient(180deg, rgba(27, 21, 18, 0.4), rgba(27, 21, 18, 0) 30%, rgba(27, 21, 18, 0) 55%, rgba(27, 21, 18, 0.72)); }
+.card-shade { background: linear-gradient(180deg, rgba(27, 21, 18, 0) 30%, rgba(27, 21, 18, 0.45) 60%, rgba(27, 21, 18, 0.86)); }
+.card-tag { background: rgba(27, 21, 18, 0.5); }
+
+/* cleaner: the crosshair and plus ornaments go */
+.hero-marks, .plus-row, .foot-marks, .lrow .plus-col { display: none; }
+
+/* paper-first: services, testimonials, case results and the contact page are light */
+.svc-row { border-bottom-color: var(--line-l); }
+.svc-sub p { color: var(--t-dark-2); }
+.svc-img { background: var(--paper-2); }
+.results .stat-n { border-bottom-color: var(--line-l); }
+.results .stat-d { color: var(--t-dark-2); }
+.contact { background: var(--paper); color: var(--t-dark); }
+.contact-top { border-top-color: var(--line-l); }
+.contact .foot-kicker, .contact .info-block h2, .contact .form-status, .contact .field .hint { color: var(--t-dark-2); }
+.contact .field input, .contact .field textarea { color: var(--t-dark); border-bottom-color: var(--line-l); }
+.contact .field input::placeholder, .contact .field textarea::placeholder { color: rgba(27, 21, 18, 0.38); }
+.contact .field input:focus, .contact .field textarea:focus { border-bottom-color: var(--brand); }
+.contact .field[data-invalid] input, .contact .field[data-invalid] textarea { border-bottom-color: #b3261e; }
+.contact .field .error { color: #b3261e; }
+.contact .check span { box-shadow: inset 0 0 0 1px var(--line-l); }
+.contact .check:hover span { box-shadow: inset 0 0 0 1px rgba(27, 21, 18, 0.5); }
+.contact .btn { background: var(--ink); color: #fff; }
+.contact .btn:hover { background: var(--brand); }
+.contact .btn-ghost { background: transparent; color: inherit; }
+.contact .btn-ghost:hover { background: var(--brand); color: #fff; }
+.contact .info-block { border-top-color: var(--line-l); }
+.contact .info-block a:hover { color: var(--brand); }
+
+/* the loader and the phone menu sit on paper; the wipe's blade is orange */
+.loader-cover { background: var(--paper); color: var(--t-dark); }
+.loader-top { color: var(--t-dark-2); }
+.loader-mark .wordmark { color: var(--t-dark); }
+.menu { background: var(--paper); color: var(--t-dark); }
+.menu-contact { border-top-color: var(--line-l); }
+.menu-contact .btn { background: var(--ink); color: #fff; }
+
+/* the founder's portrait in the About block */
+.portrait-block { display: grid; gap: 12px; align-content: end; }
+.portrait-block .ledger-media { aspect-ratio: 4 / 5; }
+.portrait-slot { height: 100%; display: grid; align-content: end; gap: 6px; padding: 22px; background: var(--paper-2); border-top: 2px solid var(--brand); }
+.portrait-slot .meta { color: var(--brand); }
+.portrait-name { font-size: var(--fs-25); line-height: 1.1; letter-spacing: -0.03em; }
+.portrait-role { font-size: var(--fs-12); color: var(--t-dark-2); }
+.founder-cap { display: grid; gap: 2px; font-size: var(--fs-16); }
+.founder-cap .meta { color: var(--brand); }
+
+/* ==========================================================================
+   Brand refresh, part 2: the footer is the one big block of brand orange;
+   pages that open on paper get a dark header; the About page sits on paper
+   ========================================================================== */
+.site-footer { background: var(--brand); color: var(--paper); }
+.site-footer .wedge::after { display: none; }
+.foot-top, .foot-bottom { border-top-color: rgba(27, 21, 18, 0.22); }
+.foot-kicker { color: rgba(27, 21, 18, 0.78); }
+.foot-email:hover { color: var(--ink); opacity: 1; }
+.foot-nav a { color: var(--ink); border-bottom-color: rgba(27, 21, 18, 0.22); }
+.foot-nav a:hover, .foot-nav a[aria-current='page'] { color: var(--paper); }
+.foot-nav a:hover sup { color: inherit; }
+.foot-legal { color: rgba(27, 21, 18, 0.72); }
+.site-footer .ruler { color: var(--ink); }
+.site-footer .line-link { color: var(--ink); }
+.site-footer .line-link::before { background: var(--paper); }
+.site-footer .line-link:hover .corner { color: var(--paper); }
+
+/* pages that open on paper: contact, 404 and the About page */
+body:has(main > .contact:first-child) .site-header, body:has(.phero-paper) .site-header { color: var(--t-dark); }
+.nf-code { color: var(--brand); }
+
+/* About: the studio photo card on paper instead of ink */
+.phero-paper { background: var(--paper); color: var(--t-dark); }
+.phero-paper .phero-center { color: #fff; }
+.phero-paper .phero-card-meta .m2 { color: var(--t-dark-2); }
+.phero-paper .phero-card { background: var(--paper-2); }

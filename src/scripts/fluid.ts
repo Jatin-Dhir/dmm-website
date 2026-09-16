@@ -194,7 +194,7 @@ export function mountFluid(host: HTMLElement, imageUrl: string, opts: FluidOptio
   const resize = () => {
     const w = host.clientWidth, h = host.clientHeight;
     // the refraction is low-frequency: cap the canvas so big/high-DPI screens stay fluid
-    const dpr = Math.min(devicePixelRatio || 1, 1.5, 2200 / Math.max(1, w * OVERSCAN));
+    const dpr = Math.min(devicePixelRatio || 1, 1.5, 1600 / Math.max(1, w * OVERSCAN));
     canvas.width = Math.max(2, Math.round(w * OVERSCAN * dpr));
     canvas.height = Math.max(2, Math.round(h * OVERSCAN * dpr));
     canvas.style.width = `${w * OVERSCAN}px`;
@@ -264,7 +264,7 @@ export function mountFluid(host: HTMLElement, imageUrl: string, opts: FluidOptio
     gl.useProgram(pressure.p);
     gl.uniform2f(pressure.u.texel, tx, ty);
     gl.uniform1i(pressure.u.div, bind(1, div.tex));
-    for (let i = 0; i < 16; i++) {
+    for (let i = 0; i < 12; i++) {
       gl.uniform1i(pressure.u.pre, bind(2, pre.read.tex));
       draw(pre.write); pre.swap();
     }

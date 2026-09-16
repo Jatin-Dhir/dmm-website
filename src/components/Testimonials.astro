@@ -12,7 +12,7 @@ const { index, of } = Astro.props;
 const coverFor = (href?: string) => (href ? work.find((w) => `/work/${w.slug}/` === href)?.cover : undefined);
 ---
 
-<section class="section dark pad-top" aria-labelledby="quotes-title">
+<section class="section pad-top" aria-labelledby="quotes-title">
   <div class="wrap">
     <Rail index={index} of={of} label="Testimonial" heading={false} />
     <h2 class="section-title" id="quotes-title" data-lines data-dim-from="1">Clients, in their<br />own words.</h2>

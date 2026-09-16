@@ -13,7 +13,7 @@ const { index, of } = Astro.props;
 const featured = services.filter((s) => ['seo', 'social', 'branding', 'outdoor'].includes(s.slug));
 ---
 
-<section class="section dark pad-top-lg" aria-labelledby="services-title">
+<section class="section pad-top-lg" aria-labelledby="services-title">
   <div class="wedge" data-wedge aria-hidden="true"></div>
   <div class="wrap">
     <Rail index={index} of={of} label="Services" id="services-title" />

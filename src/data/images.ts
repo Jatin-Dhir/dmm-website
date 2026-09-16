@@ -29,6 +29,8 @@ export const images: Record<string, Img> = {
   aboutFigure: p('aboutFigure', 'A lit hoarding beside Canal Road, Ludhiana, at night', '50% 30%'),
   servicesHero: p('servicesHero', 'A row of glowing shop signs on a wet Indian street at night', '50% 45%'),
   ledger: p('ledger', 'The red-brick Clock Tower of Ludhiana against the sky', '50% 25%'),
+  // add src/assets/photos/founder.jpg (a 4:5 portrait, 1200px wide is plenty) to show it on the home page
+  founder: p('founder', 'Dev Garg, Managing Director of Dev Marketing Mind', '50% 20%'),
 
   // Services
   svcSeo: p('svcSeo', 'A laptop showing an analytics dashboard'),

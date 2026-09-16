@@ -7,10 +7,12 @@ import CtaBlock from '../components/CtaBlock.astro';
 import { industries, process, site, values } from '../data/site';
 
 const year = new Date().getFullYear();
+// Dev Garg's portrait: drop founder.jpg into src/assets/photos and it replaces the placeholder
+const hasFounder = Object.keys(import.meta.glob('/src/assets/photos/founder.jpg')).length > 0;
 ---
 
 <Base title="About" description="Dev Marketing Mind is a Ludhiana marketing agency with one primary KPI: revenue. Meet the team's approach, process and the industries we know best.">
-  <section class="phero" aria-labelledby="about-title">
+  <section class="phero phero-paper" aria-labelledby="about-title">
     <div class="phero-card-wrap"><div class="phero-card"><Pic id="aboutHero" eager sizes="(min-width: 900px) 925px, 100vw" widths={[800, 1200, 1850]} alt="" /></div></div>
     <div class="phero-center">
       <h1 class="t-100" id="about-title" data-lines>We Are Here</h1>
@@ -52,7 +54,7 @@ const year = new Date().getFullYear();
     </div>
   </section>
 
-  <section class="section dark pad-top-lg" aria-labelledby="values-title">
+  <section class="section pad-top-lg" aria-labelledby="values-title">
     <div class="wedge" data-wedge aria-hidden="true"></div>
     <div class="wrap">
       <Rail index="02" of="03" label="Difference" id="values-title" />
@@ -68,7 +70,16 @@ const year = new Date().getFullYear();
         }
       </div>
       <div class="founder" data-fade>
-        <p class="t-12">({site.founder.name}, {site.founder.role})</p>
+        <div class="portrait-block">
+          <figure class="ledger-media" data-reveal>
+            {hasFounder ? (
+              <Pic id="founder" sizes="(min-width: 900px) 300px, 100vw" widths={[480, 800]} />
+            ) : (
+              <div class="portrait-slot" aria-hidden="true"><span class="meta">Portrait</span><span class="portrait-name">{site.founder.name}</span><span class="portrait-role">{site.founder.role}</span></div>
+            )}
+          </figure>
+          <p class="founder-cap"><span class="meta">{site.founder.name}</span><span>{site.founder.role}, {site.name}</span></p>
+        </div>
         <p class="t-25">We are a growth partner, not a vendor. Our writers, SEO specialists, social strategists, video editors and developers work under one roof, so strategy, creative and reporting never get lost between agencies.</p>
       </div>
     </div>
@@ -99,16 +110,18 @@ const year = new Date().getFullYear();
 </Base>
 
 <style is:global>
-  .values { margin-top: clamp(56px, 10vh, 120px); border-top: 1px solid var(--line-d); display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 40px; }
-  .value { padding: 28px 0 40px; border-bottom: 1px solid var(--line-d); }
+  .values { margin-top: clamp(56px, 10vh, 120px); border-top: 1px solid var(--line-l); display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 40px; }
+  .value { padding: 28px 0 40px; border-bottom: 1px solid var(--line-l); }
   .value h3 { font-size: var(--fs-16); }
-  .value p { margin-top: 10px; color: var(--t-light-2); max-width: 320px; }
-  .founder { margin-top: clamp(64px, 12vh, 140px); display: grid; grid-template-columns: 300px minmax(0, 1fr); column-gap: 40px; align-items: start; }
+  .value p { margin-top: 10px; color: var(--t-dark-2); max-width: 320px; }
+  .founder { margin-top: clamp(64px, 12vh, 140px); padding-bottom: clamp(96px, 14vh, 160px); display: grid; grid-template-columns: 300px minmax(0, 1fr); column-gap: clamp(40px, 6vw, 96px); align-items: start; }
+  .founder .t-25 { padding-top: 6px; }
   .founder .t-25 { max-width: 760px; }
   .row-sm { padding-block: 28px; }
   .row-t-sm { font-size: var(--fs-25); line-height: 1.2; letter-spacing: -0.04em; font-weight: 700; }
   @media (max-width: 899px) {
     .values { grid-template-columns: minmax(0, 1fr); }
-    .founder { grid-template-columns: minmax(0, 1fr); row-gap: 16px; }
+    .founder { grid-template-columns: minmax(0, 1fr); row-gap: 28px; }
+    .founder .portrait-block { max-width: 300px; }
   }
 </style>

@@ -16,6 +16,8 @@ import { asset } from '../data/images';
 
 const heroAvif = await getImage({ src: asset('hero'), format: 'avif', widths: [800, 1200, 1600, 2000, 2400], sizes: '100vw' });
 const heroForCanvas = await getImage({ src: asset('hero'), format: 'webp', width: 1600 });
+// Dev Garg's portrait: drop founder.jpg into src/assets/photos and it replaces the placeholder
+const hasFounder = Object.keys(import.meta.glob('/src/assets/photos/founder.jpg')).length > 0;
 ---
 
 <Base>
@@ -68,7 +70,16 @@ const heroForCanvas = await getImage({ src: asset('hero'), format: 'webp', width
         Ludhiana’s businesses, made impossible to ignore.
       </p>
       <div class="ledger">
-        <figure class="ledger-media" data-reveal><Pic id="ledger" sizes="(min-width: 900px) 328px, 100vw" widths={[480, 800]} /></figure>
+        <div class="portrait-block">
+          <figure class="ledger-media" data-reveal>
+            {hasFounder ? (
+              <Pic id="founder" sizes="(min-width: 900px) 328px, 100vw" widths={[480, 800]} />
+            ) : (
+              <div class="portrait-slot" aria-hidden="true"><span class="meta">Portrait</span><span class="portrait-name">{site.founder.name}</span><span class="portrait-role">{site.founder.role}</span></div>
+            )}
+          </figure>
+          <p class="founder-cap"><span class="meta">{site.founder.name}</span><span>{site.founder.role}, {site.name}</span></p>
+        </div>
         <div class="ledger-rows">
           <div class="ledger-row" data-fade>
             <p class="ledger-key">(Pre)</p>

@@ -78,6 +78,7 @@ function splitLines(el: HTMLElement): HTMLElement[] {
   }
   el.replaceChildren(sr, visual);
   el.dataset.split = '1';
+  el.style.textWrap = 'initial'; // the lines are explicit now; balancing would re-space them
   return $$('.ln .w', el);
 }
 
@@ -198,6 +199,7 @@ function loader(intro: gsap.core.Timeline | null, flipTo: HTMLElement | null) {
       const tx = to.left - m.left - (from.left - m.left) * s;
       const ty = to.top - m.top - (from.top - m.top) * s;
       tl.to(mark, { x: tx, y: ty, scale: s, transformOrigin: '0 0', duration: 1.05, ease: 'power3.inOut' }, 0.15)
+        .to($('.wordmark', mark)!, { color: '#ffffff', duration: 0.5, ease: 'power2.inOut' }, 0.45)
         .add(() => { gsap.set(flipTo, { opacity: 1 }); mark.style.display = 'none'; }, 1.2);
     } else {
       tl.to(mark, { opacity: 0, duration: 0.4, ease: 'power2.out' }, 0);
@@ -219,7 +221,7 @@ function loader(intro: gsap.core.Timeline | null, flipTo: HTMLElement | null) {
       else creep = gsap.to(state, { v: 97, duration: 2.2, ease: 'none', onUpdate: render });
     },
   });
-  assetsReady(3400).then(() => { ready = true; if (rampDone) complete(); });
+  assetsReady(2600).then(() => { ready = true; if (rampDone) complete(); });
 }
 
 /* ---------- page wipe: the cover closes over the page, the next page opens it ---------- */
@@ -586,7 +588,7 @@ function fluid() {
   if (!hero || !media || !src) return;
   if (!fine || reduce) return;
   // loaded on demand so the main bundle stays small on devices that never use it
-  const start = () => import('./fluid').then(({ mountFluid }) => mountFluid(media, src, { cursorSize: 1.4, cursorPower: 0.7, distortion: 0.6, resolution: 5, tint: [0.09, 0.04, 0.18], dispersion: 0.18, shine: 0.3 }));
+  const start = () => import('./fluid').then(({ mountFluid }) => mountFluid(media, src, { cursorSize: 1.4, cursorPower: 0.7, distortion: 0.6, resolution: 4, tint: [0.2, 0.09, 0.02], dispersion: 0.18, shine: 0.3 }));
   if ('requestIdleCallback' in window) (window as Window & { requestIdleCallback: (cb: () => void) => void }).requestIdleCallback(start);
   else setTimeout(start, 600);
 }
